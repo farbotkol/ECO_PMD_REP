@@ -1,0 +1,41 @@
+<!-- 
+REPORTING EXAMPLE BY JAKE & LUKE
+
+PROVIDES Ecosystem frame with the report grid for all cost data
+
+REQUIRES querystring parameter -- id - Salesforce object id of the project to be displayed
+
+-->
+<apex:page showheader="false" sidebar="false" standardStylesheets="false"
+           standardController="pse__Proj__c" extensions="ECO_PMD_LabourHoursGridPage_Controller">
+
+    <script>
+    value="{!pse__Proj__c.OracleProjectnumber__c}" ;
+    value="{!pse__Proj__c.name}";
+    value="{!pse__Proj__c.OracleProjectnumber__c}";
+    value="{!pse__Proj__c.clAECOMProjectReviewCategory__c }";
+    value="{!pse__Proj__c.ContractTypes__c }" ;
+    value="{!pse__Proj__c.pse__Project_Manager__r.Name }" ;
+    value="{!pse__Proj__c.ProjectApprover__r.Name }" ;
+    value="{!pse__Proj__c.DefaultTopTaskCustomer__r.Name }";
+    value="{!pse__Proj__c.PrimaryEndClient__r.Name }" ;
+    value="{!pse__Proj__c.BusinessLineOwningOrg__c }" ;
+    value="{!pse__Proj__c.EndMarketSector__c }" ;
+    value="{!pse__Proj__c.pse__Region__r.pse__Region_Name_Chain__c }";
+    </script>
+
+	<apex:composition template="ECO_Temp_Portal" >
+ 
+		<apex:define name="mainContent">
+            
+            <div style="padding:50px 0px;">
+                <c:ECO_PMD_LabourHoursGrid proj="{!wrapper}" obj="{!Id}"></c:ECO_PMD_LabourHoursGrid>
+            </div>
+            <div style="display:none;">
+                <div id="client-care-program" />
+                <div id="technical-practice-networks" />
+                <canvas id="case-incident-rate" /><span id="case-incident-rate-txt" />
+            </div>
+         </apex:define>
+    </apex:composition>
+</apex:page>

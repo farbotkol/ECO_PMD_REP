@@ -1,0 +1,34 @@
+<apex:page showHeader="false" sidebar="false"  standardStylesheets="true" 
+           standardController="pse__Proj__c" extensions="ECO_PMD_Commitment_Controller">
+  <html xmlns:ng="http://angularjs.org" ng-app="ecopmd">
+    <head>
+      <apex:includeScript value="{!URLFOR($Resource.angular_1_4_7_min, 'angular.min.js')}"/>
+      <!--<apex:includeScript value="{!URLFOR($Resource.angular_1_4_7_min, 'i18n/angular-locale_' + LOWER(locale) + '.js')}"/>-->
+      <apex:includeScript value="{!URLFOR($Resource.bootstrap_3_3_5_Namespaced, 'ui-bootstrap-tpls-0.14.3.min.js')}" />
+      <apex:includeScript value="{!URLFOR($Resource.agGrid210, 'dist/ag-grid.min.js')}"/>
+
+      <apex:stylesheet value="{!URLFOR($Resource.bootstrap_3_3_5_Namespaced, 'css-bs/bootstrap.min.css')}" />
+      <apex:stylesheet value="{!URLFOR($Resource.agGrid210, 'dist/ag-grid.min.css')}"/>
+      <apex:stylesheet value="{!URLFOR($Resource.agGrid210, 'dist/theme-fresh.min.css')}"/>
+      <apex:stylesheet value="{!URLFOR($Resource.ECO_agGrid, 'app/components/AngularGrid/angular-grid.directive.css')}"/>
+      
+    </head>
+    <body>  
+      <div style="padding: 20px 20px 20px 20px;" class="bs">
+        <c:ECO_PMD_NavigationBar pageTitle="Commitment Report" 
+              projectNumber="{!pse__Proj__c.OracleProjectnumber__c}" projectName="{!pse__Proj__c.name}"/>
+
+          <!-- Angular Grid Element -->
+          <commitment-report 
+              project-id="{!pse__Proj__c.Id}" 
+              project-name="{!pse__Proj__c.name}">
+          </commitment-report>
+      </div>
+
+      <apex:includeScript value="{!URLFOR($Resource.ECO_agGrid, 'app/app.js')}"/>
+      <apex:includeScript value="{!URLFOR($Resource.ECO_agGrid, 'app/services/PubSub/pub-sub.service.js')}"/>
+      <apex:includeScript value="{!URLFOR($Resource.ECO_agGrid, 'app/services/Commitments/commitments.service.js')}"/>
+      <apex:includeScript value="{!URLFOR($Resource.ECO_agGrid, 'app/components/CommitmentReport/commitment-report.directive.js')}"/>
+    </body>
+  </html>
+</apex:page>

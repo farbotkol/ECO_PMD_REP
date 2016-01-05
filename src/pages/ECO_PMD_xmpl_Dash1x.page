@@ -1,0 +1,49 @@
+<!-- Ecosystem - Project Manager Dashboard - Example -->
+<apex:page showHeader="false" sidebar="false"  standardStylesheets="true" 
+           standardController="pse__Proj__c" extensions="ECO_PMD_xmpl_Dash_Controller,ECO_PMD_Top10EmployeesByHours_Controller,ECO_PMD_Top10EmployeesByCost_Controller,ECO_PMD_Top10TasksByCost_Controller,ECO_PMD_Project_Schedule_Controller">
+<html xmlns:ng="http://angularjs.org" ng-app="ecopmd">
+  <head>
+    <apex:includeScript value="{!URLFOR($Resource.angular_1_4_7_min, 'angular.min.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.angular_1_4_7_min, 'i18n/angular-locale_' + LOWER(locale) + '.js')}"/>
+    <apex:includeScript value="{!$Resource.ECO_jQuery_1_11_2_min_js}"/>
+    <apex:includeScript value="{!URLFOR($Resource.bootstrap_3_3_5_Namespaced, 'ui-bootstrap-tpls-0.14.3.min.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.ECO_ChartJS, 'Chart.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.ECO_AngularChart, 'angular-chart.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.KendoUi, 'KendoUi/js/jquery.min.js')}"/>
+
+    <apex:stylesheet value="{!URLFOR($Resource.ECO_ng_DashPanel, 'app/components/TopTenPanel/top-ten-panel.directive.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.ECO_ng_DashPanel, 'app/components/DatePicker/date-picker.directive.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.KendoUi, 'KendoUi/Style/kendo.common.min.css')}" /> 
+    <apex:stylesheet value="{!URLFOR($Resource.KendoUi, 'KendoUi/Style/kendo.default.min.css')}" /> 
+    <apex:stylesheet value="{!URLFOR($Resource.bootstrap_3_3_5_Namespaced, 'css-bs/bootstrap.min.css')}" />
+   
+  </head>
+  <body>  
+    <div class="bs"> <!-- bootstrap namespace -->
+        <c:ECO_PMD_NavigationBar pageTitle="Project Dashboard" 
+                                projectNumber="{!pse__Proj__c.OracleProjectnumber__c}" projectName="{!pse__Proj__c.name}"/>
+               
+        <!--  AngularJS  Directive/Controller as a Component  -->
+        <top-ten-panel project-id="{!pse__Proj__c.Id}" title="Cost"></top-ten-panel>
+        <top-ten-panel project-id="{!pse__Proj__c.Id}" title="Hours"></top-ten-panel>
+        <top-ten-panel project-id="{!pse__Proj__c.Id}" title="Labor"></top-ten-panel>
+        <top-ten-panel project-id="{!pse__Proj__c.Id}" title="Margin"></top-ten-panel>
+        <top-ten-panel project-id="{!pse__Proj__c.Id}" title="Schedule"></top-ten-panel>
+    </div>
+    
+    <apex:includeScript value="{!URLFOR($Resource.KendoUi, 'KendoUi/js/kendo.all.min.js')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.ECO_ng_DashPanel, 'lib/pikaday.min.css')}" />
+            
+    <apex:includeScript value="{!URLFOR($Resource.ECO_ng_DashPanel, 'lib/moment.min.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.ECO_ng_DashPanel, 'lib/pikaday.min.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.ECO_ng_DashPanel, 'lib/pikaday-angular/pikaday-angular.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.ECO_ng_DashPanel, 'lib/pubsub.min.js')}"/>
+
+    <apex:includeScript value="{!URLFOR($Resource.ECO_ng_DashPanel, 'app/app.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.ECO_ng_DashPanel, 'app/services/PubSub/pub-sub.service.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.ECO_ng_DashPanel, 'app/services/DashPanelService/dash-panel-service.service.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.ECO_ng_DashPanel, 'app/components/TopTenPanel/top-ten-panel.directive.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.ECO_ng_DashPanel, 'app/components/DatePicker/date-picker.directive.js')}"/>
+  </body>
+</html>
+</apex:page>

@@ -1,0 +1,114 @@
+<apex:page >
+    
+  <!-- <apex:includeScript value="{!URLFOR($Resource.ECO_GrahamTest3, 'angular.js')}"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.2/jquery.min.js" type="text/javascript">
+	 <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" type="text/javascript">   
+-->
+	 <apex:includeScript value="{!$Resource.ECO_jQuery_1_11_2_min_js}"/>
+  
+   
+     <apex:includeScript value="{!URLFOR($Resource.ECO_jQueryUI_1_11_2, 'jquery-ui.min.js')}"/>
+     <apex:includeScript value="{!URLFOR($Resource.pivot, 'dist/pivot.js')}"/>
+     <apex:stylesheet value="{!URLFOR($Resource.pivot, 'dist/pivot.css')}" /> 
+
+
+	<script>
+    		var columnDefs= [];
+			   
+            var rowData = [
+                /*{make: "Toyota", model: "Celica", price: 35000},
+                {make: "Ford", model: "Mondeo", price: 32000},
+                {make: "Porsche", model: "Boxter", price: 72000}*/
+            ];
+                    
+           $(function(){
+                var derivers = $.pivotUtilities.derivers;
+
+                $.getJSON("mps.json", function(mps) {
+                    $("#output").pivotUI(mps, {
+                        derivedAttributes: {
+                            "Age Bin": derivers.bin("Age", 10),
+                            "Gender Imbalance": function(mp) {
+                                return mp["Gender"] == "Male" ? 1 : -1;
+                            }
+                        },
+                        rows: ["Province"],
+                        cols: ["Party"],
+                        aggregatorName: "Integer Sum",
+                        vals: ["Age"],
+                        rendererName: "Heatmap"
+                    });
+                });
+             });
+        
+        	$.ajax('/services/data/v34.0/analytics/reports/00Oe0000000doaA',
+            {
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader('Authorization', 'Bearer {!$Api.Session_ID}');
+                },
+                success: function(response) {
+                    
+                    
+                             
+                    console.log(response);
+          
+                    $.each(response.reportExtendedMetadata.detailColumnInfo, function(di, de) {
+                           console.log(de.label);
+                        
+                            columnDefs.push( {headerName: de.label, field: de.label.replace(/ /g, '').replace(':','')});
+                        
+                        
+                        /* $scope.$apply(function () {
+                            
+                            $scope.gridOptions = {columnDefs: columnDefs}
+                        });*/
+                       
+                    });
+
+                    
+                    $.each(response.factMap["T!T"].rows, function(di, de) {
+                        //  '{"athlete":"Cindy Klassen","age":26,"country":"Canada","year":2006,"date":"26/02/2006","sport":"Speed Skating","gold":1,"silver":2,"bronze":2,"total":5}',
+                        var rowline = '';
+                        
+                        //console.log(de.dataCells[0].value);
+                        var i = 0;
+                        $.each(columnDefs, function(ai, ae) {
+                        	rowline +=  '"' + ae.field + '":"' +de.dataCells[i++].value + '",'
+                        });
+                        rowline = rowline.substring(0, rowline.length-1);
+                        //console.log(rowline);
+                        //var jsonrowline = JSON.stringify(eval('{"athlete":"Cindy Klassen","age":26,"country":"Canada","year":2006,"date":"26/02/2006","sport":"Speed Skating","gold":1,"silver":2,"bronze":2,"total":5}'));
+                        var jsonrowline = JSON.parse('{' + rowline +'}');
+                                    
+                        rowData.push(jsonrowline);
+                        
+                        //$scope.gridOptions.rowData = rowData;
+                        //$scope.gridOptions.api.onNewRows();
+
+                        //console.log(jsonrowline);
+                    });
+                    //console.log(rowData);
+                    //$scope.gridOptions.rowData = rowData;
+                    //$scope.gridOptions.api.onNewRows();
+                      $("#output").pivotUI(rowData, {
+                       
+                        rows: [],
+                        cols: [],
+                        aggregatorName: "Integer Sum",
+                        vals: [],
+                        rendererName: "Table"
+                    });
+                }
+             });    	
+	
+        
+        //end of controller
+       
+        
+    
+    // /services/data/v34.0/analytics/reports/00Oe0000000doaA
+    
+    
+     </script>
+    <div id="output" style="margin: 30px;"/>
+</apex:page>

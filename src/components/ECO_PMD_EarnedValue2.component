@@ -1,0 +1,101 @@
+<apex:component >
+
+	
+    <apex:includeScript value="{!URLFOR($Resource.KendoUi, 'KendoUi/js/jquery.min.js')}"/>
+     <apex:includeScript value="{!URLFOR($Resource.KendoUi, 'KendoUi/js/kendo.all.min.js')}"/>
+     <apex:stylesheet value="{!URLFOR($Resource.KendoUi, 'KendoUi/style/kendo.common.min.css')}" /> 
+    <apex:stylesheet value="{!URLFOR($Resource.KendoUi, 'KendoUi/style/kendo.default.min.css')}" /> 
+
+    <div class="panel panel-default dashbox">
+        <div class="panel-heading">
+       		Earned Value
+        </div>
+         <table class='tdcenter' width='100%'>
+			<tr><td ><font size='5'>0.88</font></td><td><font size='5'>0.93</font></td><td><font size='5'>12</font></td></tr>  
+            <tr><td>CPI</td><td>SPI</td><td>Sched. Var. Days</td></tr> 
+        </table>
+
+		<div class="panel-body" >
+		
+        
+        <div id="example3">
+        <div class="demo-section k-content">
+                           <div id="chart3" width='100%'></div>
+        </div>
+
+        <script>
+       		function getFormattedDate(input) {
+                
+				var d = new Date(input);
+               
+                var m =d.getMonth();
+                
+                var y =d.getYear().toString();
+                var arr = new Array( "Jan", "Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec");
+                
+                var date = arr[m] + "-" + y.substr(y.length-2);
+                return date;           
+            }
+                        
+            function createChart3() {
+                $("#chart3").kendoChart({
+	                    
+    			    resizable: true,
+                    chartArea: {
+                        height: 250
+                    },
+                    legend: {
+                        position: "top"
+                    },
+                    series: [ {
+                        type: "line",
+                        data: [200, 400, 600, 700, 800, 850, null, null, null, null, null, null],
+                        name: "Actual Value",
+                        color: "#6699FF",
+                         axis: "USDk"
+                    }, {
+                        type: "line",
+                        data: [200, 400, 600, 750, 860, 1200, null, null, null, null, null, null],
+                        name: "Earned Value",
+                        color: "#99FF66",
+                        axis: "USDk"
+                    }, {
+                        type: "line",
+                        data: [200, 400, 600, 750, 860, 900, 1000, 1050, 1070, 1090, 1170, 1270],
+                        name: "Planned Value",
+                        color: "#ef9566",
+                        axis: "USDk"
+                    }],
+                    valueAxes: [{
+                        name: "USDk",
+                        title: { text: "USD k" }//,
+                        // min: 0,
+                        //max: 161,
+                        //majorUnit: 32
+                    }],
+                    categoryAxis: {
+                        categories: [ "Jan-15", "Feb-15","Mar-15","Apr-15","May-15","Jun-15","Jul-15","Aug-15","Sep-15","Oct-15","Nov-15","Dec-15"],
+                        //categories: categoryData,
+                        axisCrossingValues: [0,  10]
+                    },
+                    tooltip: {
+                        visible: true,
+                        format: "{0}%",
+                        template: "#= series.name #: #= value #"
+                	}
+                });
+            }
+    
+           
+            $(document).ready(createChart3);
+            $(document).bind("kendo:skinChange", createChart3);
+            
+            
+          
+        </script>
+</div>
+ </div>
+</div>
+
+
+</apex:component>

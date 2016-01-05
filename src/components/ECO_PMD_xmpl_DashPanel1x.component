@@ -1,0 +1,134 @@
+<apex:component controller="ECO_PMD_xmpl_DashPanel_Controller">
+  <apex:attribute name="projectId" description="Project Number" type="String" required="true" />
+
+    <!-- <apex:stylesheet value="{!URLFOR($Resource.ecopmd, 'ecopmd.css')}" />
+    -->
+    <style id="ecopmd.css">
+        .pmd-panel {min-width: 400px;}
+        .pmd-panel .panel-footer {margin-top:2px;margin-bottom: 2px;}
+        .pmd-kpi {width:100%;table-layout:fixed;margin-bottom:10px;}
+        .pmd-kpi td {text-align:center;}
+        .pmd-kpi tr:nth-child(odd) {font-size:xx-large;}
+        .pmd-kpi tr:nth-child(even) {font-size:x-small;}
+        
+        .pmd-table {width:100%;}
+        .pmd-table th {text-align:center;background-color:#CCCCCC;}
+        .pmd-table tr:nth-child(even) {background-color:#FFFFFF;}
+        .pmd-table tr:nth-child(odd) {background-color:#DDDDDD;}
+
+        .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+    </style>
+
+  <div ng-controller="dashPanelxmplController" class="pmd-panel panel panel-default" >
+    
+    <div class="panel-heading">
+      {!$Label.ECO_PMD_DASHPANEL_NAME}
+    </div>
+
+    <div class="panel-body">
+      <table class="pmd-kpi" width="100%">
+        <tr>
+          <td>99.9%</td>
+          <td>99k</td>
+          <td>99</td>
+        </tr>
+        <tr>
+          <td>{!$Label.ECO_PMD_GM_NSR}</td>
+          <td>{!$Label.ECO_PMD_DTW_ACCRUAL}</td>
+          <td>{!$Label.ECO_PMD_DSO_DAYS}</td>
+         </tr>
+      </table>
+      <table class="pmd-table" >
+        <tr>
+            <th>{!$ObjectType['ProjectSnapshot__c'].fields['name'].Label}</th>
+            <th>{!$ObjectType['ProjectSnapshot__c'].fields['CostITD__c'].Label}Cost ITD</th>
+            <th>{!$ObjectType['ProjectSnapshot__c'].fields['CostMonthToDate__c'].Label}</th>
+            <th>English-Label</th>
+        </tr>
+        <tr ng-repeat="datum in SFDCDATA track by $index">
+          <td><span ng-bind="::datum.SnapshotDate__c"></span></td>
+          <td align="right"><span ng-bind="::datum.CostITD__c | number:2"></span></td>
+          <td align="right"><span ng-bind="::datum.CostMonthToDate__c | number:2"></span></td>
+          <td align="right"><span ng-bind="::datum.missingElement | number:2"></span></td>
+        </tr>
+      </table>      
+    </div>
+    
+    <div class="panel-footer">
+        <div style="float:right;">
+          <label ng-click="exportedFunction()" class="btn btn-xs btn-link">
+            <span class="glyphicon glyphicon-refresh" aria-hidden="true"/>
+          </label>
+        </div>
+        <div>
+          <label class="btn btn-xs btn-link" ng-click="isCollapsed = !isCollapsed" id="dashpanel-info">
+          <span class="caret"></span>{!$Label.ECO_PMD_MORE_INFO}</label>
+           <div uib-collapse="isCollapsed">
+              <ul class="uib-dropdown-menu" aria-labelledby="dashpanel-info">
+                <li ng-repeat="link in moreinfo track by $index">
+                <a ng-href="{{::link.href}}" target="_blank" ng-bind="::link.label"></a>
+                </li>
+              </ul>
+           </div>
+        </div> 
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Faker/3.0.1/faker.min.js"></script>
+  <script id="dashpanel.js">
+      (function(){
+    
+        angular
+        .module("ecopmd")
+        .controller("dashPanelxmplController",dashPanelxmplController);
+        
+        function dashPanelxmplController($scope, $locale, $timeout){
+          $scope.exportedVariable = [];
+          $scope.exportedFunction = exportedFunction;
+            
+          loadData($scope);
+          $scope.isCollapsed = true;
+          $scope.moreinfo = [ {label:"www.aecom.com",href:"http://aecom.com"}
+                             ,{label:"Ecosystem",href:"http://ecosystem.aecom.com"}];
+                                                                            
+          function internalFunction(param){
+            return param;
+          }
+            
+          function exportedFunction(){
+              this.SFDCDATA=[];
+              loadData(this); // this = $scope
+          }
+
+          function loadData($scope){
+            $scope.exportedVariable.push(internalFunction("value"));
+            ECO_PMD_xmpl_DashPanel_Controller.ProjectSnapshot(
+              '{!projectId}',
+              function(result, event){
+                if(event.status) {
+                  $timeout(function(){
+                      $scope.SFDCDATA = mapSFDCResults(result) ;
+                  });
+                }
+              });
+          }
+
+          function mapSFDCResults(result) {
+            // assumes result is an array of objects
+            var data =[];
+            angular.forEach(result, function (val, key) {
+              this.push(mapSFDCItem(val, key));
+            },data);
+            return data;
+          }
+
+          function mapSFDCItem(val, key) {
+            // https://github.com/marak/Faker.js/
+            val.missingElement = (val.missingElement)?val.missingElement:(faker.finance.amount());
+            return val;
+          }
+        }
+    
+      })();
+  </script>
+</apex:component>

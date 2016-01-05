@@ -1,0 +1,84 @@
+<apex:component >
+
+    <apex:includeScript value="{!URLFOR($Resource.KendoUi, 'KendoUi/js/jquery.min.js')}"/>
+     <apex:includeScript value="{!URLFOR($Resource.KendoUi, 'KendoUi/js/kendo.all.min.js')}"/>
+     <apex:stylesheet value="{!URLFOR($Resource.KendoUi, 'KendoUi/style/kendo.common.min.css')}" /> 
+    <apex:stylesheet value="{!URLFOR($Resource.KendoUi, 'KendoUi/style/kendo.default.min.css')}" /> 
+
+    
+    <div class="panel panel-default dashbox">
+        <div class="panel-heading">
+       		Change Order
+        </div>
+		<div class="panel-body" >
+		
+<div id="example2">
+    <div class="demo-section k-content">
+        <div id="chart2"></div>
+    </div>
+    <script>
+  
+    
+    
+        var requestData = [{
+            caption: "Approved - $k",
+            elapsed: 20
+        }, {
+            caption: "Pending - $k",
+            elapsed: 122
+        }, {
+            caption: "Rejected - $k",
+            elapsed: -30
+        }, {
+            caption: "Anticipated Budtget",
+            summary: "total"
+        }];
+
+        var palette = [
+            "#95c3cd", "#abc75b", "#c6816f", "#968cb2"
+        ];
+
+
+
+
+        function createChart() {
+            $("#chart2").kendoChart({
+                chartArea: {
+                        height: 290
+                    },
+                dataSource: {
+                    data: requestData
+                },
+                legend: {
+                    visible: false
+                },
+                series: [{
+                    type: "horizontalWaterfall",
+                    field: "elapsed",
+                    categoryField: "caption",
+                    summaryField: "summary",
+                    color: function(point) {
+                        return palette[point.index % palette.length];
+                    }
+                }],
+                axisDefaults: {
+                    majorGridLines: {
+                        visible: false
+                    }
+                },
+                valueAxis: {
+                    labels: {
+                        format: "{0} ms"
+                    }
+                }
+            });
+        }
+        $(document).ready(createChart);
+        $(document).bind("kendo:skinChange", createChart);
+    </script>
+</div>
+ </div>
+</div>
+
+
+</apex:component>

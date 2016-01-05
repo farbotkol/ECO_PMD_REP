@@ -1,0 +1,19 @@
+<apex:page showheader="false" sidebar="false" standardStylesheets="false"
+           standardController="pse__Proj__c" extensions="ECO_PMD_LabourHoursDetailPage_Controller">
+
+	<apex:composition template="ECO_PMD_Chrome" >
+
+		<apex:define name="mainContent">
+
+            <div style="padding:50px 0px;">
+                <SPAN>DEPRECATED</SPAN><!-- <c:ECO_PMD_CostDetail projectId="{!Id}" layout="ODCSubs"/> -->
+            </div>
+            <div style="display:none;">
+                <div id="client-care-program" />
+                <div id="technical-practice-networks" />
+                <canvas id="case-incident-rate" /><span id="case-incident-rate-txt" />
+            </div>
+
+         </apex:define>
+    </apex:composition>
+</apex:page>
